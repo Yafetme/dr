@@ -13,7 +13,7 @@ import { cookieStorage, createStorage, http } from '@wagmi/core'
 const projectId = '7fb83121f24001fe287ad6e719130eab'
 
 // 2. Set up Wagmi adapter
-export const networks = [bsc, mainnet]
+export const networks = [bsc, mainnet] as [any, ...any[]]
 
 const wagmiAdapter = new WagmiAdapter({
     storage: createStorage({
