@@ -71,7 +71,7 @@ export default function SelectNetwork({ selectedChainId, setSelectedChainId }: S
                                 onClick={async () => {
                                     setIsOpen(false);
                                     if (isCurrent) {
-                                        toast.info(`You're already on ${chain.name}`);
+                                        toast(`You're already on ${chain.name}`);
                                         return;
                                     }
                                     try {
@@ -83,8 +83,8 @@ export default function SelectNetwork({ selectedChainId, setSelectedChainId }: S
                                     }
                                 }}
                                 className={`w-full px-6 py-5 rounded-3xl flex items-center gap-4 transition-all group ${isCurrent
-                                        ? 'bg-white text-black font-bold border-2 border-white'
-                                        : 'bg-neutral-900/50 text-white border border-white/5 hover:border-white/20 hover:bg-neutral-900'
+                                    ? 'bg-white text-black font-bold border-2 border-white'
+                                    : 'bg-neutral-900/50 text-white border border-white/5 hover:border-white/20 hover:bg-neutral-900'
                                     }`}
                             >
                                 <div className={`h-12 w-12 rounded-full overflow-hidden flex items-center justify-center border ${isCurrent ? 'border-black/10' : 'border-white/10'}`}>
