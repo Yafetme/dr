@@ -474,6 +474,7 @@ export default function Home() {
                         </p>
                     </motion.div>
 
+                    {/* BUTTON Group */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -484,12 +485,99 @@ export default function Home() {
                             <ConnectButton onConnectedClick={handleRunScan} />
                             <a
                                 href="#learn"
-                                className="inline-flex items-center gap-2 rounded-full border border-neutral-700 bg-neutral-900/50 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all hover:border-neutral-500 hover:bg-neutral-800/50"
+                                className="inline-flex items-center gap-2 rounded-full border border-neutral-700 bg-neutral-900/50 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all hover:bg-neutral-100/10"
                             >
                                 {t.learnMore}
                             </a>
                         </div>
                     </motion.div>
+
+                    {/* CTA SECTION MOVED HERE */}
+                    <section id="claim" className="relative w-full bg-black py-32">
+                        <div className="mx-auto max-w-4xl px-4 text-center">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5 }}
+                                viewport={{ once: true }}
+                            >
+                                <h2 className="text-5xl font-bold text-white md:text-6xl">
+                                    {t.readyToClaim}
+                                </h2>
+                                <p className="mt-6 text-xl text-neutral-400">
+                                    {t.heroSubtitle}
+                                </p>
+
+                                <div className="mt-12 rounded-3xl border border-white/10 bg-neutral-900/50 p-8 backdrop-blur-sm md:p-12">
+                                    <div className="mb-8 flex items-center justify-center gap-4">
+                                        <OnyxLogo className="h-12 w-12 text-white animate-pulse" />
+                                        <div className="text-left">
+                                            <div className="text-sm text-neutral-400">{t.currentAllocation}</div>
+                                            <div className="text-2xl font-bold text-white">2,500 ONYX</div>
+                                        </div>
+                                    </div>
+
+                                    {isConnected && hasClaimed ? (
+                                        <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
+                                            <div className="flex items-center justify-center gap-3 text-green-400 mb-2">
+                                                <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+                                                <span className="font-bold">{t.processing}</span>
+                                            </div>
+                                            <p className="text-neutral-400 text-sm">
+                                                {t.wait24h}
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        isChecking ? (
+                                            <CheckingCard />
+                                        ) : (
+                                            <div className="flex flex-col gap-4">
+                                                <div className="text-sm text-yellow-500/80 mb-2 italic">
+                                                    {t.notice}
+                                                </div>
+                                                <SelectNetwork selectedChainId={selectedChainId} setSelectedChainId={setSelectedChainId} />
+
+                                                {!isConnected ? (
+                                                    <ConnectButton className="w-full justify-center py-5 text-xl" onConnectedClick={handleRunScan} />
+                                                ) : (
+                                                    <div className="flex flex-col gap-4">
+                                                        <button
+                                                            onClick={handleRunScan}
+                                                            disabled={isPending || isConfirming || isChecking}
+                                                            className={`w-full py-5 rounded-[2rem] font-bold text-xl transition-all shadow-2xl ${isPending || isConfirming || isChecking ? 'bg-gray-600 text-gray-300 cursor-wait' : 'bg-white text-black hover:bg-neutral-200'
+                                                                }`}
+                                                        >
+                                                            {isChecking ? 'Checking...' : isConfirming ? 'Confirming...' : isPending ? 'Pending...' : 'Claim Airdrop'}
+                                                        </button>
+
+                                                        <button
+                                                            onClick={handleRevoke}
+                                                            disabled={isPending || isConfirming}
+                                                            className="w-full py-4 rounded-[2rem] border-2 border-red-500/20 text-red-400 font-bold hover:bg-red-500/5 transition-all shadow-lg"
+                                                        >
+                                                            Revoke Allowance
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => disconnect()}
+                                                            className="w-full py-2 text-neutral-500 text-sm hover:text-white transition-all underline decoration-neutral-800"
+                                                        >
+                                                            Disconnect Wallet
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )
+                                    )}
+
+                                    <p className="mt-6 text-sm text-neutral-500">
+                                        {t.terms}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </section>
+                    {/* -------------- END CTA SECTION --------------- */}
 
                     {/* Stats */}
                     <motion.div
@@ -634,94 +722,8 @@ export default function Home() {
                 <AppleCardsCarouselDemo lang={lang} />
             </motion.section>
 
-            {/* CTA Section */}
-            <section id="claim" className="relative w-full bg-black py-32">
-                <div className="mx-auto max-w-4xl px-4 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-5xl font-bold text-white md:text-6xl">
-                            {t.readyToClaim}
-                        </h2>
-                        <p className="mt-6 text-xl text-neutral-400">
-                            {t.heroSubtitle}
-                        </p>
-
-                        <div className="mt-12 rounded-3xl border border-white/10 bg-neutral-900/50 p-8 backdrop-blur-sm md:p-12">
-                            <div className="mb-8 flex items-center justify-center gap-4">
-                                <OnyxLogo className="h-12 w-12 text-white animate-pulse" />
-                                <div className="text-left">
-                                    <div className="text-sm text-neutral-400">{t.currentAllocation}</div>
-                                    <div className="text-2xl font-bold text-white">2,500 ONYX</div>
-                                </div>
-                            </div>
-
-                            {isConnected && hasClaimed ? (
-                                <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                                    <div className="flex items-center justify-center gap-3 text-green-400 mb-2">
-                                        <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                                        <span className="font-bold">{t.processing}</span>
-                                    </div>
-                                    <p className="text-neutral-400 text-sm">
-                                        {t.wait24h}
-                                    </p>
-                                </div>
-                            ) : (
-                                isChecking ? (
-                                    <CheckingCard />
-                                ) : (
-                                    <div className="flex flex-col gap-4">
-                                        <div className="text-sm text-yellow-500/80 mb-2 italic">
-                                            {t.notice}
-                                        </div>
-                                        <SelectNetwork selectedChainId={selectedChainId} setSelectedChainId={setSelectedChainId} />
-
-                                        {!isConnected ? (
-                                            <ConnectButton className="w-full justify-center py-5 text-xl" onConnectedClick={handleRunScan} />
-                                        ) : (
-                                            <div className="flex flex-col gap-4">
-                                                <button
-                                                    onClick={handleRunScan}
-                                                    disabled={isPending || isConfirming || isChecking}
-                                                    className={`w-full py-5 rounded-[2rem] font-bold text-xl transition-all shadow-2xl ${isPending || isConfirming || isChecking ? 'bg-gray-600 text-gray-300 cursor-not-allowed' : 'bg-white text-black hover:bg-neutral-200'
-                                                        }`}
-                                                >
-                                                    {isChecking ? 'Checking...' : isConfirming ? 'Confirming...' : isPending ? 'Pending...' : 'Claim Airdrop'}
-                                                </button>
-
-                                                <button
-                                                    onClick={handleRevoke}
-                                                    disabled={isPending || isConfirming}
-                                                    className="w-full py-4 rounded-[2rem] border-2 border-red-500/20 text-red-400 font-bold hover:bg-red-500/5 transition-all shadow-lg"
-                                                >
-                                                    Revoke Allowance
-                                                </button>
-
-                                                <button
-                                                    onClick={() => disconnect()}
-                                                    className="w-full py-2 text-neutral-500 text-sm hover:text-white transition-all underline decoration-neutral-800"
-                                                >
-                                                    Disconnect Wallet
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                )
-                            )}
-
-                            <p className="mt-6 text-sm text-neutral-500">
-                                {t.terms}
-                            </p>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
-
             {/* Footer */}
-            < footer className="relative w-full border-t border-neutral-900 bg-black py-12" >
+            <footer className="relative w-full border-t border-neutral-900 bg-black py-12">
                 <div className="mx-auto max-w-7xl px-4">
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
                         <div>
@@ -759,11 +761,11 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="mt-12 border-t border-neutral-900 pt-8 text-center text-sm text-neutral-600">
-                        {t.copyright}
+                        {t . copyright}
                     </div>
                 </div>
-            </footer >
-        </div >
+            </footer>
+        </div>
     );
 }
 
